@@ -1,0 +1,80 @@
+/*                                                                                                                                                                      
+ * (c) Copyright 2023 KineticFire. All rights reserved.
+ *  
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+plugins {
+    // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
+    id 'java-gradle-plugin'
+
+    // Apply the Groovy plugin to add support for Groovy
+    id 'groovy'
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral( )
+}
+
+dependencies {
+    // Use the awesome Spock testing and specification framework
+    testImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
+}
+
+group = 'com.kineticfire.gradle.cool_stuff'
+version = '1.0.0'
+
+gradlePlugin {
+    // Define the plugin
+    plugins {
+        CoolStuffPlugin {
+            id = 'com.kineticfire.gradle.cool_stuff'
+            displayName = 'Cool Stuff Plugin'
+            description = 'Example custom Gradle plugin'
+            implementationClass = 'com.kineticfire.gradle.cool_stuff.CoolStuffPlugin'
+        }
+    }
+}
+
+jar {
+    archiveBaseName = 'cool-stuff-plugin'
+}
+
+// Add a source set for the functional test suite
+sourceSets {
+    functionalTest {
+    }
+}
+
+configurations.functionalTestImplementation.extendsFrom( configurations.testImplementation )
+
+// Add a task to run the functional tests
+tasks.register( 'functionalTest', Test ) {
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+    useJUnitPlatform( )
+}
+
+gradlePlugin.testSourceSets.add( sourceSets.functionalTest )
+
+tasks.named( 'check' ) {
+    // Run the functional tests as part of `check`
+    dependsOn(tasks.functionalTest)
+}
+
+tasks.named( 'test' ) {
+    // Use JUnit Jupiter for unit tests.
+    useJUnitPlatform()
+}
