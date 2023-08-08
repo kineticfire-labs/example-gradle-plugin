@@ -22,7 +22,7 @@ import org.gradle.testkit.runner.GradleRunner
 
 
 /**
- * A simple functional test for the 'com.kineticfire.gradle.cool_stuff.greeting' plugin.
+ * A simple functional test for the plugin.
  */
 class CoolStuffPluginFunctionalTest extends Specification {
 

@@ -13,28 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kineticfire.gradle.cool_stuff
+package com.kineticfire.gradle.cool_stuff.example.howdy
 
 
-import org.gradle.api.Project
-import org.gradle.api.Plugin
+
+import spock.lang.Specification
 
 
-/**
- * A simple plugin.
- */
-class CoolStuffPlugin implements Plugin<Project> {
 
-    void apply( Project project ) {
+class HowdyWorldTest extends Specification {
 
-        project.task( 'coolThing', type: CoolThingTask ) {
-            group = 'Cool Stuff'
-            description = 'Do a cool thing.'
-        }
+    def "application has a greeting"() {
+        setup:
+        def hw = new HowdyWorld()
 
-        project.task( 'greatThing', type: GreatThingTask ) {
-            group = 'Cool Stuff'
-            description = 'Do a great thing.'
-        }
+        when:
+        def result = hw.greeting
+
+        then:
+        result != null
     }
+
 }

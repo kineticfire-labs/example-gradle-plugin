@@ -1,4 +1,4 @@
-/*
+/*                                                                                                                                                                      
  * (c) Copyright 2023 KineticFire. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,28 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kineticfire.gradle.cool_stuff
+package com.kineticfire.gradle.cool_stuff.example.howdy;
 
 
-import org.gradle.api.Project
-import org.gradle.api.Plugin
 
+public class HowdyWorld {
 
-/**
- * A simple plugin.
- */
-class CoolStuffPlugin implements Plugin<Project> {
-
-    void apply( Project project ) {
-
-        project.task( 'coolThing', type: CoolThingTask ) {
-            group = 'Cool Stuff'
-            description = 'Do a cool thing.'
-        }
-
-        project.task( 'greatThing', type: GreatThingTask ) {
-            group = 'Cool Stuff'
-            description = 'Do a great thing.'
-        }
+    public String getGreeting() {
+        return "Howdy, World!";
     }
+
+    public static void main( String[] args ) {
+        System.out.println( new HowdyWorld( ).getGreeting( ) );
+    }
+
 }

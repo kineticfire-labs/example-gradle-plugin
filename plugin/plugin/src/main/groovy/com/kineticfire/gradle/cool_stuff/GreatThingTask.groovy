@@ -22,9 +22,8 @@ import org.gradle.api.tasks.TaskAction
 
                                                                                                                                                                        
 
-
 /**
- *
+ * A task for the plugin.
  */
 abstract class GreatThingTask extends DefaultTask {
 

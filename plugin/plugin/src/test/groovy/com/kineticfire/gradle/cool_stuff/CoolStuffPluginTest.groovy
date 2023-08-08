@@ -22,7 +22,7 @@ import spock.lang.Specification
 
 
 /**
- * A simple unit test for the 'com.kineticfire.gradle.cool_stuff.greeting' plugin.
+ * A simple unit test for the plugin.
  */
 class CoolStuffPluginTest extends Specification {
 
