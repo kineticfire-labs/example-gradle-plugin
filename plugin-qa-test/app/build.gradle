@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
+/*
+USAGE:
+    Must provide properties:
+        - libsDir = the directory where the plugin library under test can be found
+        - pluginVersion = the version of the plugin under test
+
+EXAMPLE USAGE:
+
+./gradlew -PlibsDir="/home/user/kf/github/example-gradle-plugin/plugin/plugin/build/libs/" -PpluginVersion=1.0.0 clean build
+*/
+
+
 buildscript {
     repositories {
        flatDir {
-           //todo accept system property
-           dirs '/home/user/kf/github/example-gradle-plugin/plugin/plugin/build/libs/'
+           dirs "$libsDir"
        }
     }  
     dependencies {
         classpath group: 'com.kineticfire.gradle.cool_stuff',
                   name: 'cool-stuff-plugin',
-                  version: '1.0.0' //todo dynamic version
+                  version: "$pluginVersion"
     }  
 }
 
@@ -83,7 +94,3 @@ tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
-
-//todo
-// use with:  g -Pmyprop="hi there" clean test
-//println "myprop is $filesystemDir"

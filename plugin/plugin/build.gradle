@@ -71,10 +71,10 @@ gradlePlugin.testSourceSets.add( sourceSets.functionalTest )
 
 tasks.named( 'check' ) {
     // Run the functional tests as part of `check`
-    dependsOn(tasks.functionalTest)
+    dependsOn( tasks.functionalTest )
 }
 
 tasks.named( 'test' ) {
     // Use JUnit Jupiter for unit tests.
-    useJUnitPlatform()
+    useJUnitPlatform( )
 }
