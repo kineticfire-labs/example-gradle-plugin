@@ -28,7 +28,7 @@ plugins {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)  // todo: was not here, then i put '17'
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 

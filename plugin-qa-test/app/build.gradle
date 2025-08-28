@@ -15,30 +15,35 @@
  */
 
 /*
-USAGE:
-    Must provide properties:
-        - libsDir = the directory where the plugin library under test can be found
-        - pluginVersion = the version of the plugin under test
-
 EXAMPLE USAGE:
 
-./gradlew -PlibsDir="../plugin/plugin/build/libs/" -PpluginVersion=1.0.0 clean build
+./gradlew -PpluginVersion=1.0.0 clean build
+
+Note that the plugin must be built and at its default location and name:
+../plugin/plugin/build/libs/cool-stuff-plugin-<version>.jar
 */
 
 
 buildscript {
-    repositories {
-       flatDir {
-           dirs "$libsDir"
-       }
-    }  
-    dependencies {
-        classpath group: 'com.kineticfire.gradle.cool_stuff',
-                  name: 'cool-stuff-plugin',
-                  version: "$pluginVersion"
-    }  
-}
+    // require -PpluginVersion
+    assert project.hasProperty('pluginVersion') :
+            "Missing -PpluginVersion. Example: ./gradlew -PpluginVersion=1.0.0 build"
 
+    def pluginVer   = project.property('pluginVersion').toString()
+
+    // default path from :app → ../../plugin/plugin/build/libs (override with -PlibsDir=...)
+    def libsDirProp = project.findProperty('libsDir')?.toString()
+    def libsDirPath = libsDirProp ?: "${project.projectDir}/../../plugin/plugin/build/libs"
+    def pluginJar   = "${libsDirPath}/cool-stuff-plugin-${pluginVer}.jar"
+
+    assert project.file(pluginJar).exists() :
+            "Missing plugin JAR at: ${project.file(pluginJar).absolutePath}\n" +
+                    "Build the plugin first or pass -PlibsDir=..."
+
+    dependencies {
+        classpath files(pluginJar)
+    }
+}
 
 plugins {
     // Apply the groovy plugin to also add support for Groovy (needed for Spock)
@@ -57,21 +62,18 @@ repositories {
 }
 
 dependencies {
-    // Use the latest Groovy version for Spock testing
-    testImplementation 'org.codehaus.groovy:groovy:3.0.13'
-
-    // Use the awesome Spock testing and specification framework even with Java
-    testImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation "org.apache.groovy:groovy:4.0.22"
+    testImplementation "org.spockframework:spock-core:2.3-groovy-4.0"
+    testRuntimeOnly  "org.junit.platform:junit-platform-launcher"
 
     // This dependency is used by the application.
-    implementation 'com.google.guava:guava:31.1-jre'
+    implementation "com.google.guava:guava:31.1-jre"
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21) //todo: this was 11?
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
