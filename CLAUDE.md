@@ -32,11 +32,11 @@ The goals of the `example-gradle-plugin` project are to:
    - `plugin/src/main`: the source code for the plugin
    - `plugin/src/test`: unit tests for the plugin
    - `plugin/src/functionalTest`: functional tests for the plugin
-- `pugin-qa-test/`: the subproject to implement the plugin's quality assurance (QA) test
-   - `pugin-qa-test/app`: the application to build, whose build will use the plugin
-      - `pugin-qa-test/app/src`: the application's source code
-      - `pugin-qa-test/app/test`: unit tests for the application
-      - `pugin-qa-test/build.gradle`: the Gradle build for the test application that uses the plugin
+- `pugin-integration-test/`: the subproject to implement the plugin's quality assurance (QA) test
+   - `pugin-integration-test/app`: the application to build, whose build will use the plugin
+      - `pugin-integration-test/app/src`: the application's source code
+      - `pugin-integration-test/app/test`: unit tests for the application
+      - `pugin-integration-test/build.gradle`: the Gradle build for the test application that uses the plugin
 - `docs/`: documentation
    - `docs/development-philosophies/development-philosophies.md`: guiding development philosophies 
    - `docs/style/`: style guide 

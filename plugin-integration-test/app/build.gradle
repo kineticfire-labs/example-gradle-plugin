@@ -31,7 +31,6 @@ buildscript {
 
     def pluginVer   = project.property('pluginVersion').toString()
 
-    // default path from :app → ../../plugin/plugin/build/libs (override with -PlibsDir=...)
     def libsDirProp = project.findProperty('libsDir')?.toString()
     def libsDirPath = libsDirProp ?: "${project.projectDir}/../../plugin/plugin/build/libs"
     def pluginJar   = "${libsDirPath}/cool-stuff-plugin-${pluginVer}.jar"
@@ -53,7 +52,7 @@ plugins {
     id 'application'
 }
 
-// Apply the plugin under QA test
+// Apply the plugin under integration test
 apply plugin: com.kineticfire.gradle.cool_stuff.CoolStuffPlugin
 
 repositories {
