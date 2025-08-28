@@ -22,7 +22,7 @@ USAGE:
 
 EXAMPLE USAGE:
 
-./gradlew -PlibsDir="/home/user/kf/github/example-gradle-plugin/plugin/plugin/build/libs/" -PpluginVersion=1.0.0 clean build
+./gradlew -PlibsDir="../plugin/plugin/build/libs/" -PpluginVersion=1.0.0 clean build
 */
 
 
@@ -71,7 +71,7 @@ dependencies {
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(21) //todo: this was 11?
     }
 }
 
