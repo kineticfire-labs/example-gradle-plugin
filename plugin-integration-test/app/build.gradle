@@ -63,7 +63,7 @@ repositories {
 dependencies {
     testImplementation "org.apache.groovy:groovy:4.0.22"
     testImplementation "org.spockframework:spock-core:2.3-groovy-4.0"
-    testRuntimeOnly  "org.junit.platform:junit-platform-launcher"
+    testRuntimeOnly  "org.junit.platform:junit-platform-launcher:1.13.4"
 
     // This dependency is used by the application.
     implementation "com.google.guava:guava:31.1-jre"
