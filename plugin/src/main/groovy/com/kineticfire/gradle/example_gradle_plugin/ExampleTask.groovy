@@ -13,15 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /*
  * KineticFire Labs: https://labs.kineticfire.com/
  *     project site: https://github.com/kineticfire-labs/example-gradle-plugin/
  */
+package com.kineticfire.gradle.example_gradle_plugin
 
-plugins {
-    // Apply the foojay-resolver plugin to allow automatic download of JDKs
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.4.0'
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.TaskAction
+
+
+/**
+ * A task for the plugin.
+ */
+abstract class ExampleTask extends DefaultTask {
+
+    @TaskAction
+    def doExample( ) {
+        println 'ExampleTask: running example task!'
+    }
+
 }
 
-rootProject.name = 'howdy-world'
+

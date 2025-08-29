@@ -1,0 +1,99 @@
+/*
+ * (c) Copyright 2023-2025 example-gradle-plugin Contributors. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * KineticFire Labs: https://labs.kineticfire.com/
+ *     project site: https://github.com/kineticfire-labs/example-gradle-plugin/
+ */
+
+/*
+ * Example Gradle Plugin Build Script
+ * 
+ * Usage:
+ *   ./gradlew build                         # Build with default version 1.0.0
+ *   ./gradlew -PpluginVersion=2.0.0 build   # Build with custom version
+ * 
+ * Outputs plugin JAR to: build/libs/example-gradle-plugin-<version>.jar
+ */
+
+plugins {
+    // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
+    id 'java-gradle-plugin'
+
+    // Apply the Groovy plugin to add support for Groovy
+    id 'groovy'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral( )
+}
+
+dependencies {
+    testImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
+}
+
+group = 'com.kineticfire.gradle.example_gradle_plugin'
+version = project.hasProperty('pluginVersion') ? project.property('pluginVersion') : '1.0.0'
+
+gradlePlugin {
+    // Define the plugin
+    plugins {
+        ExampleGradlePlugin {
+            id = 'com.kineticfire.gradle.example-gradle-plugin'
+            displayName = 'Example Gradle Plugin'
+            description = 'Example custom Gradle plugin for demonstration purposes'
+            implementationClass = 'com.kineticfire.gradle.example_gradle_plugin.ExampleGradlePlugin'
+        }
+    }
+}
+
+jar {
+    archiveBaseName = 'example-gradle-plugin'
+}
+
+// Add a source set for the functional test suite
+sourceSets {
+    functionalTest {
+    }
+}
+
+configurations.functionalTestImplementation.extendsFrom( configurations.testImplementation )
+
+// Add a task to run the functional tests
+tasks.register( 'functionalTest', Test ) {
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+    useJUnitPlatform( )
+}
+
+gradlePlugin.testSourceSets.add( sourceSets.functionalTest )
+
+tasks.named( 'check' ) {
+    // Run the functional tests as part of `check`
+    dependsOn( tasks.functionalTest )
+}
+
+tasks.named( 'test' ) {
+    // Use JUnit Jupiter for unit tests.
+    useJUnitPlatform( )
+}

@@ -13,15 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /*
  * KineticFire Labs: https://labs.kineticfire.com/
  *     project site: https://github.com/kineticfire-labs/example-gradle-plugin/
  */
+package com.kineticfire.gradle.example_gradle_plugin.example.howdy
 
-plugins {
-    // Apply the foojay-resolver plugin to allow automatic download of JDKs
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.4.0'
+import spock.lang.Specification
+
+
+class HowdyWorldTest extends Specification {
+
+    def "application has a greeting"() {
+        setup:
+        def hw = new HowdyWorld()
+
+        when:
+        def result = hw.greeting
+
+        then:
+        result != null
+    }
 }
-
-rootProject.name = 'howdy-world'
