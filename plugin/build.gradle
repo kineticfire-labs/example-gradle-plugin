@@ -50,6 +50,8 @@ repositories {
 
 dependencies {
     testImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
+    // Explicit test framework dependency for Gradle 9.0 compatibility
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 group = 'com.kineticfire.gradle.example_gradle_plugin'
@@ -78,6 +80,12 @@ sourceSets {
 }
 
 configurations.functionalTestImplementation.extendsFrom( configurations.testImplementation )
+
+// Functional test dependencies - explicit declaration for Gradle 9.0 compatibility
+dependencies {
+    functionalTestImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
+    functionalTestRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
 
 // Add a task to run the functional tests
 tasks.register( 'functionalTest', Test ) {
