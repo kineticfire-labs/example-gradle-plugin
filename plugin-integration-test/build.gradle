@@ -34,23 +34,44 @@
 
 
 buildscript {
-    // require -PpluginVersion
-    assert project.hasProperty('pluginVersion') :
-            "Missing -PpluginVersion. Example: ./gradlew -PpluginVersion=1.0.0 build"
+    // Define tasks that require the plugin version
+    def tasksRequiringPlugin = [
+        'build', 'test', 'run', 'check', 'assemble',
+        'compileJava', 'compileGroovy', 'processResources', 'classes', 'jar',
+        'startScripts', 'distTar', 'distZip',
+        'exampleTask', 'sampleTask'
+    ]
 
-    def pluginVer   = project.property('pluginVersion').toString()
-
-    def libsDirProp = project.findProperty('libsDir')?.toString()
-    def libsDirPath = (libsDirProp ?: "${project.projectDir}/../plugin/build/libs").toString()
-    def pluginJar   = "${libsDirPath}/example-gradle-plugin-${pluginVer}.jar".toString()
-
-    assert project.file(pluginJar).exists() :
-            "Missing plugin JAR at: ${project.file(pluginJar).absolutePath}\n" +
-                    "Build the plugin first or pass -PlibsDir=..."
-
-    dependencies {
-        classpath files(pluginJar)
+    // Check if any requested tasks require the plugin
+    def requestedTasks = gradle.startParameter.taskNames
+    def requiresPlugin = !requestedTasks.isEmpty() && requestedTasks.any { taskName ->
+        tasksRequiringPlugin.contains(taskName) || taskName.startsWith('compile') || taskName.startsWith('test')
     }
+
+    // Only require plugin version for tasks that need it
+    if (requiresPlugin) {
+        assert project.hasProperty('pluginVersion') :
+                "Missing -PpluginVersion. This task requires the plugin.\n" +
+                "Example: ./gradlew -PpluginVersion=1.0.0 build\n" +
+                "Tasks that don't require plugin version: tasks, help, clean, properties"
+
+        def pluginVer   = project.property('pluginVersion').toString()
+
+        def libsDirProp = project.findProperty('libsDir')?.toString()
+        def libsDirPath = (libsDirProp ?: "${project.projectDir}/../plugin/build/libs").toString()
+        def pluginJar   = "${libsDirPath}/example-gradle-plugin-${pluginVer}.jar".toString()
+
+        assert project.file(pluginJar).exists() :
+                "Missing plugin JAR at: ${project.file(pluginJar).absolutePath}\n" +
+                        "Build the plugin first or pass -PlibsDir=..."
+
+        dependencies {
+            classpath files(pluginJar)
+        }
+    }
+
+    // Store the requiresPlugin flag for use outside buildscript
+    project.ext.requiresPlugin = requiresPlugin
 }
 
 plugins {
@@ -61,8 +82,10 @@ plugins {
     id 'application'
 }
 
-// Apply the plugin under integration test
-apply plugin: com.kineticfire.gradle.example_gradle_plugin.ExampleGradlePlugin
+// Apply the plugin under integration test (only when needed)
+if (project.ext.requiresPlugin) {
+    apply plugin: com.kineticfire.gradle.example_gradle_plugin.ExampleGradlePlugin
+}
 
 repositories {
     // Use Maven Central for resolving dependencies.
