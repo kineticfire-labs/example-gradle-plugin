@@ -49,9 +49,11 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
+    implementation "org.apache.groovy:groovy:4.0.28"
+    testImplementation 'org.spockframework:spock-core:2.4-M6-groovy-4.0'
     // Explicit test framework dependency for Gradle 9.0 compatibility
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-api:5.13.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.13.4'
 }
 
 group = 'com.kineticfire.gradle.example_gradle_plugin'
