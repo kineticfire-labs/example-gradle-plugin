@@ -49,11 +49,9 @@ repositories {
 }
 
 dependencies {
-    implementation "org.apache.groovy:groovy:4.0.28"
-    testImplementation 'org.spockframework:spock-core:2.4-M6-groovy-4.0'
-    // Explicit test framework dependency for Gradle 9.0 compatibility
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-api:5.13.4'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.13.4'
+    implementation libs.groovy
+    testImplementation libs.bundles.testing
+    testRuntimeOnly libs.bundles.testing.runtime
 }
 
 group = 'com.kineticfire.gradle.example_gradle_plugin'
@@ -73,6 +71,18 @@ gradlePlugin {
 
 jar {
     archiveBaseName = 'example-gradle-plugin'
+    
+    manifest {
+        attributes(
+            'Implementation-Title': project.name,
+            'Implementation-Version': project.version,
+            'Implementation-Vendor': 'KineticFire Labs'
+        )
+    }
+    
+    // Reproducible builds
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
 }
 
 // Add a source set for the functional test suite
@@ -83,10 +93,10 @@ sourceSets {
 
 configurations.functionalTestImplementation.extendsFrom( configurations.testImplementation )
 
-// Functional test dependencies - explicit declaration for Gradle 9.0 compatibility
+// Functional test dependencies - using standardized versions from catalog
 dependencies {
-    functionalTestImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
-    functionalTestRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    functionalTestImplementation libs.bundles.testing
+    functionalTestRuntimeOnly libs.bundles.testing.runtime
 }
 
 // Add a task to run the functional tests

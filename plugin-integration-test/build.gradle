@@ -93,12 +93,11 @@ repositories {
 }
 
 dependencies {
-    testImplementation "org.apache.groovy:groovy:4.0.28"
-    testImplementation "org.spockframework:spock-core:2.4-M6-groovy-4.0"
-    testRuntimeOnly  "org.junit.platform:junit-platform-launcher:1.13.4"
+    testImplementation libs.bundles.testing
+    testRuntimeOnly libs.bundles.testing.runtime
 
     // This dependency is used by the application
-    implementation "com.google.guava:guava:31.1-jre"
+    implementation libs.guava
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -118,9 +117,19 @@ version = 'SNAPSHOT'
 
 jar {
     archiveBaseName = 'gradle-example-plugin-howdy-app'
+    
     manifest {
-        attributes 'Main-Class' : 'com.kineticfire.gradle.example_gradle_plugin.example.howdy.HowdyWorld'
+        attributes(
+            'Main-Class': 'com.kineticfire.gradle.example_gradle_plugin.example.howdy.HowdyWorld',
+            'Implementation-Title': project.name,
+            'Implementation-Version': project.version,
+            'Implementation-Vendor': 'KineticFire Labs'
+        )
     }
+    
+    // Reproducible builds
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
 }
 
 tasks.named('test') {
