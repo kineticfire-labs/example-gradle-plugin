@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: com.kineticfire.gradle.example_gradle_plugin.example.howdy.H
- owdyWorld
-Implementation-Title: howdy-world
-Implementation-Version: SNAPSHOT
-Implementation-Vendor: KineticFire Labs
-
